@@ -1,3 +1,4 @@
+import huggingface_hub
 import torch
 
 from load_datasets import load_split_dataset
@@ -17,9 +18,15 @@ def run_training(dataset_name, model_name):
 
     # Add new tokens when running on bitext_customer support dataset
     if dataset_name == "bitext_customer_support":
-        with open("bitext_customer_support_tokens.txt", "r") as f:
+        # Download entities file from repository
+        huggingface_hub.hf_hub_download(repo_id="jothamteshome/customerSupportChatbot",
+                                    filename="bitext_customer_support_entities.txt",
+                                    local_dir="./")
+        
+        with open("bitext_customer_support_entities.txt", "r") as f:
             new_tokens = "".join(f.readlines()).strip().split("\n")
 
+        # Set new tokens
         new_tokens = set(new_tokens) - set(tokenizer.vocab.keys())
         tokenizer.add_tokens(list(new_tokens))
         model.resize_token_embeddings(len(tokenizer))
