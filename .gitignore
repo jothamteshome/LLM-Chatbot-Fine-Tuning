@@ -163,4 +163,4 @@ cython_debug/
 
 checkpoint*
 *-model/
-bitext_customer_support_entities.txt
+huggingface_files/

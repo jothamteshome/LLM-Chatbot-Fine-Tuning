@@ -1,6 +1,6 @@
-import huggingface_hub
 import torch
 
+from huggingface_hub import hf_hub_download
 from load_datasets import load_split_dataset
 from optimum.onnxruntime import ORTModelForCausalLM
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging, TrainingArguments   
@@ -18,11 +18,11 @@ def run_training(dataset_name, model_name):
     # Add new tokens when running on bitext_customer support dataset
     if dataset_name == "bitext_customer_support":
         # Download entities file from repository
-        huggingface_hub.hf_hub_download(repo_id="jothamteshome/customerSupportChatbot",
-                                    filename="bitext_customer_support_entities.txt",
-                                    local_dir="./")
+        hf_hub_download(repo_id="jothamteshome/customerSupportChatbot",
+                            filename="bitext_customer_support_entities.txt",
+                            local_dir="huggingface_files")
         
-        with open("bitext_customer_support_entities.txt", "r") as f:
+        with open("huggingface_files/bitext_customer_support_entities.txt", "r") as f:
             new_tokens = "".join(f.readlines()).strip().split("\n")
 
         # Set new tokens

@@ -6,6 +6,9 @@ def main():
     # Set dataset name and model name to use
     dataset_name = "bitext_customer_support"
     model_name = "microsoft/DialoGPT-medium"
+
+    # Fine tune selected model using selected dataset
+    # Only datasets found in `load_datasets.py` can be used at the moment
     # run_training(dataset_name, model_name)
 
     # Pass in local directory or huggingface repo location of model to run inference
