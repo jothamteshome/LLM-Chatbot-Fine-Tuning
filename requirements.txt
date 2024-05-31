@@ -1,6 +1,7 @@
 convokit
 datasets
 natsort
+optimum
 transformers
 --index-url https://download.pytorch.org/whl/cu118
 torch
