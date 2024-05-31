@@ -123,6 +123,6 @@ def load_split_dataset(dataset_name, model_name):
                 'bitext_customer_support': load_bitext_customer_support_dataset}
     
     if datasets.get(dataset_name, False):
-        return f"{dataset_name}-{model_name}-model", datasets[dataset_name]()
+        return f"fine_tuned_models/{dataset_name}-{model_name}-model", datasets[dataset_name]()
     else:
         raise KeyError("Dataset does not exist. Please add function to format dataset in `load_datasets.py`.")

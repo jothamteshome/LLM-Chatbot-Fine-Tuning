@@ -1,7 +1,7 @@
 import torch
 
 from huggingface_hub import hf_hub_download
-from load_datasets import load_split_dataset
+from llm_chatbot_modules.load_datasets import load_split_dataset
 from optimum.onnxruntime import ORTModelForCausalLM
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging, TrainingArguments   
 from trl import SFTTrainer, setup_chat_format
@@ -10,7 +10,7 @@ from trl import SFTTrainer, setup_chat_format
 logging.set_verbosity_error()
 
 # Function to handle the fine-tuning of the model using a given dataset
-def run_training(dataset_name, model_name):
+def run_fine_tuning(dataset_name, model_name):
     # Load pretrained model and tokenizer
     model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -46,7 +46,7 @@ def run_training(dataset_name, model_name):
                                         per_device_train_batch_size=1,
                                         gradient_accumulation_steps=4,
                                         bf16=True,
-                                        logging_strategy="epoch",
+                                        disable_tqdm=False,
                                         save_total_limit=1,
                                         )
 
@@ -65,17 +65,15 @@ def run_training(dataset_name, model_name):
     trainer.save_model(f"{directory}/tuned_model")
 
     # Export model to onnx
-    export_model_to_onnx(dataset_name, model_name)
+    export_model_to_onnx(directory)
 
 
 # Export transformers model to ONNX for better cpu inference performance
-def export_model_to_onnx(dataset_name, model_name):
-    model_name = model_name.split("/")[-1]
-
+def export_model_to_onnx(directory):
     # Load existing fine-tuned model
-    ort_model = ORTModelForCausalLM.from_pretrained(f"{dataset_name}-{model_name}-model/tuned_model", export=True)
-    tokenizer = AutoTokenizer.from_pretrained(f"{dataset_name}-{model_name}-model/tuned_model")
+    ort_model = ORTModelForCausalLM.from_pretrained(f"{directory}/tuned_model", export=True)
+    tokenizer = AutoTokenizer.from_pretrained(f"{directory}/tuned_model")
 
     # Export model using onnx
-    ort_model.save_pretrained(f"{dataset_name}-{model_name}-model/onnx_model")
-    tokenizer.save_pretrained(f"{dataset_name}-{model_name}-model/onnx_model")
+    ort_model.save_pretrained(f"{directory}/onnx_model")
+    tokenizer.save_pretrained(f"{directory}/onnx_model")

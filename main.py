@@ -1,5 +1,5 @@
-from fine_tune_pretrained import run_training
-from run_inference import run_inference
+from llm_chatbot_modules.run_fine_tuning import run_fine_tuning
+from llm_chatbot_modules.run_inference import run_inference
 
 
 def main():
@@ -9,7 +9,7 @@ def main():
 
     # Fine tune selected model using selected dataset
     # Only datasets found in `load_datasets.py` can be used at the moment
-    # run_training(dataset_name, model_name)
+    # run_fine_tuning(dataset_name, model_name)
 
     # Pass in local directory or huggingface repo location of model to run inference
     # Defaults to `jothamteshome/customerSupportChatbot`

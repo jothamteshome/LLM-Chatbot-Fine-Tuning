@@ -162,5 +162,5 @@ cython_debug/
 #.idea/
 
 checkpoint*
-*-model/
+fine_tuned_models/
 huggingface_files/
