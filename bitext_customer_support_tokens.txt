@@ -1,0 +1,30 @@
+{{Order Number}}
+{{Invoice Number}}
+{{Online Order Interaction}}
+{{Online Payment Interaction}}
+{{Online Navigation Step}}
+{{Online Customer Support Channel}}
+{{Profile}}
+{{Profile Type}}
+{{Settings}}
+{{Online Company Portal Info}}
+{{Date}}
+{{Date Range}}
+{{Shipping Cut-off Time}}
+{{Delivery City}}
+{{Delivery Country}}
+{{Salutation}}
+{{Client First Name}}
+{{Client Last Name}}
+{{Customer Support Phone Number}}
+{{Customer Support Email}}
+{{Live Chat Support}}
+{{Website URL}}
+{{Upgrade Account}}
+{{Account Type}}
+{{Account Category}}
+{{Account Change}}
+{{Program}}
+{{Refund Amount}}
+{{Money Amount}}
+{{Store Location}}
