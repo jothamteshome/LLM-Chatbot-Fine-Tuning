@@ -1,5 +1,6 @@
 convokit
 datasets
+huggingface_hub
 natsort
 optimum
 transformers

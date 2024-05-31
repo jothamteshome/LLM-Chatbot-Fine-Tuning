@@ -60,13 +60,10 @@ def generate_response(model, tokenizer, chat):
 
 
 # Function to handle running the inference on given chat messages
-def run_inference(dataset_name, model_name):
-    # Slice model name to obtain directory names
-    model_name = model_name.split("/")[-1]
-    
+def run_inference(model_location="jothamteshome/customerSupportChatbot"):
     # Load in the fine-tuned model and tokenizer
-    model = ORTModelForCausalLM.from_pretrained(f"{dataset_name}-{model_name}-model/onnx_model", torch_dtype=torch.bfloat16)
-    tokenizer = AutoTokenizer.from_pretrained(f"{dataset_name}-{model_name}-model/onnx_model")
+    model = ORTModelForCausalLM.from_pretrained(model_location, torch_dtype=torch.bfloat16)
+    tokenizer = AutoTokenizer.from_pretrained(model_location)
 
     # Initialize the chat with a generic system message
     chat = []

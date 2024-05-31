@@ -122,4 +122,7 @@ def load_split_dataset(dataset_name, model_name):
                 'movie_dialog_corpus': load_movie_dialog_dataset,
                 'bitext_customer_support': load_bitext_customer_support_dataset}
     
-    return f"{dataset_name}-{model_name}-model", datasets[dataset_name]()
+    if datasets.get(dataset_name, False):
+        return f"{dataset_name}-{model_name}-model", datasets[dataset_name]()
+    else:
+        raise KeyError("Dataset does not exist. Please add function to format dataset in `load_datasets.py`.")

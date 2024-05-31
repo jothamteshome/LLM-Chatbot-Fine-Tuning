@@ -3,7 +3,6 @@ import torch
 
 from load_datasets import load_split_dataset
 from optimum.onnxruntime import ORTModelForCausalLM
-from run_inference import run_inference
 from transformers import AutoModelForCausalLM, AutoTokenizer, logging, TrainingArguments   
 from trl import SFTTrainer, setup_chat_format
 
@@ -80,10 +79,3 @@ def export_model_to_onnx(dataset_name, model_name):
     # Export model using onnx
     ort_model.save_pretrained(f"{dataset_name}-{model_name}-model/onnx_model")
     tokenizer.save_pretrained(f"{dataset_name}-{model_name}-model/onnx_model")
-
-
-if __name__ == "__main__":
-    dataset_name = "bitext_customer_support"
-    model_name = "microsoft/DialoGPT-medium"
-    # run_training(dataset_name, model_name)
-    run_inference(dataset_name, model_name)
