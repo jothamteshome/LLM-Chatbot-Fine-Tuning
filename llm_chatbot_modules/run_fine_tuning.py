@@ -39,14 +39,16 @@ def run_fine_tuning(args):
 
     # Set training arguments for the trainer
     training_args = TrainingArguments(directory,
-                                        eval_strategy='no',
-                                        num_train_epochs=7,
-                                        learning_rate=5e-5,
-                                        weight_decay=1e-5,
+                                        num_train_epochs=args.epochs,
+                                        learning_rate=args.learning_rate,
+                                        weight_decay=args.weight_decay,
                                         per_device_train_batch_size=1,
                                         gradient_accumulation_steps=4,
                                         bf16=True,
                                         disable_tqdm=False,
+                                        eval_strategy="epoch",
+                                        save_strategy="epoch",
+                                        load_best_model_at_end=True,
                                         save_total_limit=1,
                                         )
 
@@ -54,7 +56,8 @@ def run_fine_tuning(args):
     trainer = SFTTrainer(model=model,
                         tokenizer=tokenizer,
                         args=training_args,
-                        train_dataset=dataset,
+                        train_dataset=dataset['train'],
+                        eval_dataset=dataset['test'],
                         max_seq_length=1024)
 
 

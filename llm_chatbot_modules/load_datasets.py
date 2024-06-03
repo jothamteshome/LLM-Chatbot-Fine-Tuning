@@ -48,6 +48,9 @@ def load_movie_dialog_dataset():
     # Convert from list of dictionaries back to Huggingface Dataset
     dataset = Dataset.from_list(data)
 
+    # Split dataset into training and validation set
+    dataset = dataset.train_test_split(test_size=0.1, shuffle=True, seed=42)
+
     return dataset
 
 
@@ -69,6 +72,9 @@ def load_bitext_customer_support_dataset():
     # Convert from list of dictionaries back to Huggingface Dataset
     dataset = Dataset.from_list(data)
 
+    # Split dataset into training and validation set
+    dataset = dataset.train_test_split(test_size=0.1, shuffle=True, seed=42)
+
     return dataset
 
 
@@ -76,6 +82,9 @@ def load_bitext_customer_support_dataset():
 def load_code_feedback_dataset():
     # Load the training split of the Code-Feedback dataset from HuggingFace datasets
     dataset = load_dataset("m-a-p/Code-Feedback", split="train")
+
+    # Split dataset into training and validation set
+    dataset = dataset.train_test_split(test_size=0.1, shuffle=True, seed=42)
 
     return dataset
 
@@ -101,6 +110,9 @@ def load_general_knowledge_dataset():
     # Convert from list of dictionaries back to Huggingface Dataset
     dataset = Dataset.from_list(data)
 
+    # Split dataset into training and validation set
+    dataset = dataset.train_test_split(test_size=0.1, shuffle=True, seed=42)
+
     return dataset
 
 
@@ -108,6 +120,9 @@ def load_general_knowledge_dataset():
 def load_ultrachat_dataset():
     # Load the training split of the Ultrachat 200k dataset from HuggingFace datasets
     dataset = load_dataset("HuggingFaceH4/ultrachat_200k", split="train_sft")
+
+    # Split dataset into training and validation set
+    dataset = dataset.train_test_split(test_size=0.1, shuffle=True, seed=42)
 
     return dataset
 
@@ -122,7 +137,4 @@ def load_split_dataset(dataset_name, model_name):
                 'movie_dialog_corpus': load_movie_dialog_dataset,
                 'bitext_customer_support': load_bitext_customer_support_dataset}
     
-    if datasets.get(dataset_name, False):
-        return f"fine_tuned_models/{dataset_name}-{model_name}-model", datasets[dataset_name]()
-    else:
-        raise KeyError("Dataset does not exist. Please add function to format dataset in `load_datasets.py`.")
+    return f"fine_tuned_models/{dataset_name}-{model_name}-model", datasets[dataset_name]()

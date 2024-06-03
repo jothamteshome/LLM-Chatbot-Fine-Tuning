@@ -11,7 +11,6 @@ def create_fine_tuning_parser(subparsers):
 
     # Add model name argument to fine-tuning parser
     fine_tuning_parser.add_argument("--model_name",
-                                    nargs=1,
                                     help="Local directory or Hugging Face Repo containing model (default: %(default)s)",
                                     default="microsoft/DialoGPT-medium",
                                     required=False)
@@ -19,10 +18,31 @@ def create_fine_tuning_parser(subparsers):
     # Add dataset argument to fine-tuning parser
     fine_tuning_parser.add_argument("--dataset",
                                     choices=["bitext_customer_support", "code_feedback", "general_knowledge", "movie_dialog_corpus", "ultrachat_200k"],
-                                    nargs=1,
                                     help="Name of dataset to load from `load_datasets.py` (default: %(default)s)",
                                     default="general_knowledge",
                                     required=False)
+    
+    # Add epochs argument to fine-tuning parser
+    fine_tuning_parser.add_argument("--epochs",
+                                    help="Number of epochs to tune the model for (default: %(default)s)",
+                                    default=4,
+                                    type=int,
+                                    required=False)
+    
+    # Add weight decay value argument to fine-tuning parser
+    fine_tuning_parser.add_argument("--weight_decay",
+                                    help="Value of the weight decay to apply to layers in optimizer (default: %(default)s)",
+                                    default=1e-2,
+                                    type=float,
+                                    required=False)
+    
+    # Add learning rate value argument to fine-tuning parser
+    fine_tuning_parser.add_argument("--learning_rate",
+                                    help="Initial learning rate to use in optimizer (default: %(default)s)",
+                                    default=5e-5,
+                                    type=float,
+                                    required=False)
+    
     
     # Add function default for fine-tuning parser
     fine_tuning_parser.set_defaults(func=run_fine_tuning)
