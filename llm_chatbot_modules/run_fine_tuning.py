@@ -35,7 +35,7 @@ def run_fine_tuning(args):
     model, tokenizer = setup_chat_format(model, tokenizer)
 
     # Load in the dataset using a given name
-    directory, dataset = load_split_dataset(args.dataset, args.model_name)
+    directory, dataset = load_split_dataset(args.dataset, args.model_name, tokenizer)
 
     # Set training arguments for the trainer
     training_args = TrainingArguments(directory,
@@ -46,10 +46,9 @@ def run_fine_tuning(args):
                                         gradient_accumulation_steps=4,
                                         bf16=True,
                                         disable_tqdm=False,
-                                        eval_strategy="epoch",
-                                        save_strategy="epoch",
-                                        load_best_model_at_end=True,
-                                        save_total_limit=1,
+                                        eval_strategy="steps",
+                                        save_strategy="steps",
+                                        load_best_model_at_end=True
                                         )
 
     # Set up the supervised fine-tuning trainer from TRL
