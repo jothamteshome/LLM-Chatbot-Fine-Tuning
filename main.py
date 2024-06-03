@@ -7,39 +7,44 @@ from llm_chatbot_modules.run_inference import run_inference
 # Create a subparser for running fine tuning on pretrained model
 def create_fine_tuning_parser(subparsers):
     # Subparser to handle arguments for model fine-tuning tasks
-    fine_tuning_parser = subparsers.add_parser('fine-tune', help="Fine-tune a Hugging Face pretrained model")
+    fine_tuning_parser = subparsers.add_parser('tune', help="Fine-tune a Hugging Face pretrained model")
 
     # Add model name argument to fine-tuning parser
-    fine_tuning_parser.add_argument("--model_name",
+    fine_tuning_parser.add_argument("-m", "--model",
+                                    dest="model_name",
                                     help="Local directory or Hugging Face Repo containing model (default: %(default)s)",
                                     default="microsoft/DialoGPT-medium",
                                     required=False)
     
     # Add dataset argument to fine-tuning parser
-    fine_tuning_parser.add_argument("--dataset",
+    fine_tuning_parser.add_argument("-d", "--dataset", 
+                                    dest="dataset",
                                     choices=["bitext_customer_support", "code_feedback", "general_knowledge", "movie_dialog_corpus", "ultrachat_200k"],
                                     help="Name of dataset to load from `load_datasets.py` (default: %(default)s)",
                                     default="general_knowledge",
                                     required=False)
     
     # Add epochs argument to fine-tuning parser
-    fine_tuning_parser.add_argument("--epochs",
+    fine_tuning_parser.add_argument("-e", "--epochs",
+                                    dest="epochs",
                                     help="Number of epochs to tune the model for (default: %(default)s)",
-                                    default=4,
+                                    default=3,
                                     type=int,
                                     required=False)
     
     # Add weight decay value argument to fine-tuning parser
-    fine_tuning_parser.add_argument("--weight_decay",
+    fine_tuning_parser.add_argument("-wd", "--weight_decay",
+                                    dest="weight_decay",
                                     help="Value of the weight decay to apply to layers in optimizer (default: %(default)s)",
                                     default=1e-2,
                                     type=float,
                                     required=False)
     
     # Add learning rate value argument to fine-tuning parser
-    fine_tuning_parser.add_argument("--learning_rate",
+    fine_tuning_parser.add_argument("-lr", "--learning_rate",
+                                    dest="learning_rate",
                                     help="Initial learning rate to use in optimizer (default: %(default)s)",
-                                    default=5e-5,
+                                    default=5e-4,
                                     type=float,
                                     required=False)
     
@@ -52,7 +57,8 @@ def create_fine_tuning_parser(subparsers):
 def create_inference_parser(subparsers):
     # Subparser to handle arguments for model inference tasks
     inference_parser = subparsers.add_parser("infer", help="Run inference on a Hugging Face pretrained model or existing model")
-    inference_parser.add_argument("--model_loc",
+    inference_parser.add_argument("-m", "--model",
+                                  dest="model",
                                   help="Local directory or Hugging Face Repo containing model (default: %(default)s)",
                                   default="jothamteshome/customerSupportChatbot",
                                   required=False)
@@ -66,7 +72,7 @@ def main():
     parser = argparse.ArgumentParser(description="Fine-tune a pretrained model or generate text with a pretrained/existing model")    
 
     # Add subparsers to initial parser
-    subparsers = parser.add_subparsers(help="sub-command-help", required=True)
+    subparsers = parser.add_subparsers(help="Options to run fine-tuning or inference on model", required=True)
     create_fine_tuning_parser(subparsers)
     create_inference_parser(subparsers)
 
