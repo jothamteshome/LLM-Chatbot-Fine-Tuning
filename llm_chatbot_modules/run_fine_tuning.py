@@ -14,6 +14,7 @@ def run_fine_tuning(args):
     # Load pretrained model and tokenizer
     model = AutoModelForCausalLM.from_pretrained(args.model_name, torch_dtype=torch.bfloat16)
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
+    tokenizer.add_special_tokens({'bos_token': "<|im_start|>", "eos_token": "<|im_end|>"})
 
     # Add new tokens when running on bitext_customer support dataset
     if args.dataset == "bitext_customer_support":

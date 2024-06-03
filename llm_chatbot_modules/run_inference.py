@@ -51,7 +51,7 @@ def generate_response(model, tokenizer, chat):
 
     # Process and replace generated response output
     processed_response_content = process_generated_response(response[0]['generated_text'][-1]['content'])
-    response[0]['generated_text'][-1]['content'] = processed_response_content
+    response[0]['generated_text'][-1]['content'] = f"{tokenizer.bos_token}{processed_response_content}{tokenizer.eos_token}"
 
     # Print the most recent response
     print(response[0]['generated_text'][-1]['content'])
@@ -77,7 +77,7 @@ def run_inference(args):
     # Loop forever
     while True:
         # Add the current user input message to the chat history
-        chat.append({'role': "user", "content": input(">> ")})
+        chat.append({'role': "user", "content": f'{tokenizer.bos_token}{input(">> ")}{tokenizer.eos_token}'})
 
         # Run inference on the current chat history and update the chat history
         # for future inference
