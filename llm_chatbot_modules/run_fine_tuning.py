@@ -10,13 +10,13 @@ from trl import SFTTrainer, setup_chat_format
 logging.set_verbosity_error()
 
 # Function to handle the fine-tuning of the model using a given dataset
-def run_fine_tuning(dataset_name, model_name):
+def run_fine_tuning(args):
     # Load pretrained model and tokenizer
-    model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.bfloat16)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(args.model_name, torch_dtype=torch.bfloat16)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
 
     # Add new tokens when running on bitext_customer support dataset
-    if dataset_name == "bitext_customer_support":
+    if args.dataset == "bitext_customer_support":
         # Download entities file from repository
         hf_hub_download(repo_id="jothamteshome/customerSupportChatbot",
                             filename="bitext_customer_support_entities.txt",
@@ -35,7 +35,7 @@ def run_fine_tuning(dataset_name, model_name):
     model, tokenizer = setup_chat_format(model, tokenizer)
 
     # Load in the dataset using a given name
-    directory, dataset = load_split_dataset(dataset_name, model_name)
+    directory, dataset = load_split_dataset(args.dataset, args.model_name)
 
     # Set training arguments for the trainer
     training_args = TrainingArguments(directory,

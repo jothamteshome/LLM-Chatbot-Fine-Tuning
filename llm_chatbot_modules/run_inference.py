@@ -1,7 +1,7 @@
 import torch
 
 from optimum.onnxruntime import ORTModelForCausalLM
-from transformers import AutoTokenizer, pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
 # Process the generated responses to remove duplicate sentences and to end on
 # a punctuation mark
@@ -60,10 +60,16 @@ def generate_response(model, tokenizer, chat):
 
 
 # Function to handle running the inference on given chat messages
-def run_inference(model_location="jothamteshome/customerSupportChatbot"):
+def run_inference(args):
     # Load in the fine-tuned model and tokenizer
-    model = ORTModelForCausalLM.from_pretrained(model_location, torch_dtype=torch.bfloat16)
-    tokenizer = AutoTokenizer.from_pretrained(model_location)
+    try:
+        # Try loading ONNX Runtime model first
+        model = ORTModelForCausalLM.from_pretrained(args.model_loc, torch_dtype=torch.bfloat16)
+    except FileNotFoundError:
+        # Fall back on regular AutoModel if ONNX Runtime model not found
+        model = AutoModelForCausalLM.from_pretrained(args.model_loc, torch_dtype=torch.bfloat16)
+    
+    tokenizer = AutoTokenizer.from_pretrained(args.model_loc)
 
     # Initialize the chat with a generic system message
     chat = []

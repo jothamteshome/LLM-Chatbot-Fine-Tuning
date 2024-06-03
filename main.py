@@ -1,19 +1,58 @@
+import argparse
+
 from llm_chatbot_modules.run_fine_tuning import run_fine_tuning
 from llm_chatbot_modules.run_inference import run_inference
 
 
+# Create a subparser for running fine tuning on pretrained model
+def create_fine_tuning_parser(subparsers):
+    # Subparser to handle arguments for model fine-tuning tasks
+    fine_tuning_parser = subparsers.add_parser('fine-tune', help="Fine-tune a Hugging Face pretrained model")
+
+    # Add model name argument to fine-tuning parser
+    fine_tuning_parser.add_argument("--model_name",
+                                    nargs=1,
+                                    help="Local directory or Hugging Face Repo containing model (default: %(default)s)",
+                                    default="microsoft/DialoGPT-medium",
+                                    required=False)
+    
+    # Add dataset argument to fine-tuning parser
+    fine_tuning_parser.add_argument("--dataset",
+                                    choices=["bitext_customer_support", "code_feedback", "general_knowledge", "movie_dialog_corpus", "ultrachat_200k"],
+                                    nargs=1,
+                                    help="Name of dataset to load from `load_datasets.py` (default: %(default)s)",
+                                    default="general_knowledge",
+                                    required=False)
+    
+    # Add function default for fine-tuning parser
+    fine_tuning_parser.set_defaults(func=run_fine_tuning)
+
+
+# Create a subparser for running inference on pretrained or fine-tuned model
+def create_inference_parser(subparsers):
+    # Subparser to handle arguments for model inference tasks
+    inference_parser = subparsers.add_parser("infer", help="Run inference on a Hugging Face pretrained model or existing model")
+    inference_parser.add_argument("--model_loc",
+                                  help="Local directory or Hugging Face Repo containing model (default: %(default)s)",
+                                  default="jothamteshome/customerSupportChatbot",
+                                  required=False)
+    
+    # Add function default for inference parser
+    inference_parser.set_defaults(func=run_inference)
+
+
 def main():
-    # Set dataset name and model name to use
-    dataset_name = "bitext_customer_support"
-    model_name = "microsoft/DialoGPT-medium"
+    # Create argument parser to handle running of appropriate files
+    parser = argparse.ArgumentParser(description="Fine-tune a pretrained model or generate text with a pretrained/existing model")    
 
-    # Fine tune selected model using selected dataset
-    # Only datasets found in `load_datasets.py` can be used at the moment
-    # run_fine_tuning(dataset_name, model_name)
+    # Add subparsers to initial parser
+    subparsers = parser.add_subparsers(help="sub-command-help", required=True)
+    create_fine_tuning_parser(subparsers)
+    create_inference_parser(subparsers)
 
-    # Pass in local directory or huggingface repo location of model to run inference
-    # Defaults to `jothamteshome/customerSupportChatbot`
-    run_inference()
+    # Parse arguments and run correct file
+    args = parser.parse_args()
+    args.func(args)
 
 
 if __name__ == "__main__":
