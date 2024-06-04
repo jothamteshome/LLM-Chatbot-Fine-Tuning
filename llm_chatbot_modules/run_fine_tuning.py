@@ -49,7 +49,11 @@ def run_fine_tuning(args):
                                         disable_tqdm=False,
                                         eval_strategy="steps",
                                         save_strategy="steps",
-                                        load_best_model_at_end=True
+                                        logging_strategy="epoch",
+                                        eval_steps=1000,
+                                        save_steps=1000,
+                                        load_best_model_at_end=True,
+                                        save_total_limit=1
                                         )
 
     # Set up the supervised fine-tuning trainer from TRL
@@ -58,7 +62,7 @@ def run_fine_tuning(args):
                         args=training_args,
                         train_dataset=dataset['train'],
                         eval_dataset=dataset['test'],
-                        max_seq_length=1024)
+                        max_seq_length=512)
 
 
     # Train the model

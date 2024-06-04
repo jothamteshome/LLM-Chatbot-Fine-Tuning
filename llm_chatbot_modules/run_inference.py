@@ -47,7 +47,7 @@ def generate_response(model, tokenizer, chat):
     pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
     # Generate a response using the chat history
-    response = pipe(chat, max_new_tokens=150)
+    response = pipe(chat, max_new_tokens=64)
 
     # Process and replace generated response output
     processed_response_content = process_generated_response(response[0]['generated_text'][-1]['content'])

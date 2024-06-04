@@ -58,7 +58,7 @@ def create_inference_parser(subparsers):
     # Subparser to handle arguments for model inference tasks
     inference_parser = subparsers.add_parser("infer", help="Run inference on a Hugging Face pretrained model or existing model")
     inference_parser.add_argument("-m", "--model",
-                                  dest="model",
+                                  dest="model_loc",
                                   help="Local directory or Hugging Face Repo containing model (default: %(default)s)",
                                   default="jothamteshome/customerSupportChatbot",
                                   required=False)
